@@ -1,3 +1,66 @@
-[gd_scene format=3 uid="uid://caquj6w0wp01m"]
+[gd_scene load_steps=2 format=3 uid="uid://caquj6w0wp01m"]
 
-[node name="MainWindow" type="Node2D"]
+[ext_resource type="Script" uid="uid://b7tb3a0mevqa" path="res://Windows/MainWindow.cs" id="1_e6s26"]
+
+[node name="MainWindow" type="Node2D" node_paths=PackedStringArray("RootUiNode")]
+script = ExtResource("1_e6s26")
+RootUiNode = NodePath("UI")
+
+[node name="UI" type="PanelContainer" parent="."]
+offset_right = 1152.0
+offset_bottom = 648.0
+size_flags_horizontal = 8
+
+[node name="Layout" type="VBoxContainer" parent="UI"]
+layout_mode = 2
+
+[node name="TopMenu" type="PanelContainer" parent="UI/Layout"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.03
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/Layout/TopMenu"]
+layout_mode = 2
+
+[node name="MenuButton" type="MenuButton" parent="UI/Layout/TopMenu/HBoxContainer"]
+layout_mode = 2
+text = "Menu"
+
+[node name="MenuContainer" type="VBoxContainer" parent="UI/Layout/TopMenu/HBoxContainer/MenuButton"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="OpenFileButton" type="Button" parent="UI/Layout/TopMenu/HBoxContainer/MenuButton/MenuContainer"]
+layout_mode = 2
+
+[node name="ProjectSelector" type="TabContainer" parent="UI/Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+drag_to_rearrange_enabled = true
+
+[node name="HorizontalSplitter" type="HSplitContainer" parent="UI/Layout/ProjectSelector"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="SideBar" type="PanelContainer" parent="UI/Layout/ProjectSelector/HorizontalSplitter"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+
+[node name="NodesView" type="Tree" parent="UI/Layout/ProjectSelector/HorizontalSplitter/SideBar"]
+layout_mode = 2
+
+[node name="MainContent" type="PanelContainer" parent="UI/Layout/ProjectSelector/HorizontalSplitter"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StatusBar" type="PanelContainer" parent="UI/Layout"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.03
