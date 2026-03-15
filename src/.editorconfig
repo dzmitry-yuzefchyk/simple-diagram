@@ -13,7 +13,7 @@ indent_size = 4
 trim_trailing_whitespace = true
 
 # Specify UTF-8 without byte-order mark
-[*.{csproj,locproj,nativeproj,proj,resx,slnx,vbproj}]
+[*.{csproj,locproj,nativeproj,proj,resx,slnx,vbproj,Props}]
 charset = utf-8
 indent_size = 2
 
@@ -162,9 +162,6 @@ csharp_space_between_method_declaration_name_and_open_parenthesis = false
 csharp_space_between_method_declaration_parameter_list_parentheses = false
 csharp_space_between_parentheses = false
 csharp_space_between_square_brackets = false
-
-# License header
-file_header_template = Licensed to the .NET Foundation under one or more agreements.\nThe .NET Foundation licenses this file to you under the MIT license.
 
 [src/libraries/System.Net.Http/src/System/Net/Http/{SocketsHttpHandler/Http3RequestStream.cs,BrowserHttpHandler/BrowserHttpHandler.cs}]
 # disable CA2025, the analyzer throws a NullReferenceException when processing this file: https://github.com/dotnet/roslyn-analyzers/issues/7652

@@ -2,10 +2,14 @@ using Godot;
 
 namespace SimpleDiagram.Windows;
 
-public partial class MainWindow : Node2D
+public partial class ResizeListener : Node
 {
+    [Export]
+    public Control RootUiNode { get; set; }
+
     public override void _Ready()
     {
+        GetTree().Root.SizeChanged += RootOnSizeChanged;
     }
 
     public override void _Process(double delta)
@@ -19,5 +23,9 @@ public partial class MainWindow : Node2D
 
     private void RootOnSizeChanged()
     {
+        if (RootUiNode != null)
+        {
+            RootUiNode.Size = GetTree().Root.Size;
+        }
     }
 }

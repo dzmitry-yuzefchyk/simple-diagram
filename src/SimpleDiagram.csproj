@@ -1,7 +1,24 @@
 <Project Sdk="Godot.NET.Sdk/4.4.1">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>SimpleDiagram</RootNamespace>
+    <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
+    <PackageReference Include="Antlr4BuildTasks" Version="12.14.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Antlr4 Include="Parser\Mermaid\Grammar\*.g4">
+      <Package>SimpleDiagram.Parser.Mermaid.Grammar</Package>
+      <Listener>true</Listener>
+      <Visitor>true</Visitor>
+    </Antlr4>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Parser\SimpleDiagramProjectFile\" />
+  </ItemGroup>
 </Project>

@@ -2,6 +2,11 @@
 .godot/
 .nomedia
 
+# ANTLR
+*.java
+*.interp
+*.tokens
+
 # Godot-specific ignores
 .import/
 export.cfg
