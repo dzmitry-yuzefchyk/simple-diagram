@@ -27,7 +27,7 @@ nodes
     ;
 
 reference
-    : node_definition link node_definition
+    : nodeDefinition link nodeDefinition
     ;
 
 link
@@ -37,7 +37,7 @@ link
     | LINK_THICK
     ;
 
-node_definition
+nodeDefinition
     : ID
     ;
 

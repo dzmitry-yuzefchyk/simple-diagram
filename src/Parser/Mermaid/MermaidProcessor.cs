@@ -1,13 +1,15 @@
-﻿using Antlr4.Runtime;
+﻿using System.IO;
+using Antlr4.Runtime;
+using SimpleDiagram.DocumentModel;
 using SimpleDiagram.Parser.Mermaid.Grammar;
 
 namespace SimpleDiagram.Parser.Mermaid;
 
 public class MermaidProcessor : IParser
 {
-    public object Parse()
+    public SimpleDiagramDocument Parse(string file)
     {
-        var input = "";
+        var input = File.ReadAllText(file);
         var stream = new AntlrInputStream(input);
         var lexer = new MermaidLexer(stream);
         var tokens = new CommonTokenStream(lexer);
@@ -15,6 +17,8 @@ public class MermaidProcessor : IParser
         var visitor = new SimpleDiagramMermaidVisitor();
 
         var diagram = parser.diagram();
-        return visitor.Visit(diagram);
+        SimpleDiagramDocument result = visitor.Visit(diagram);
+
+        return result;
     }
 }

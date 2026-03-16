@@ -1,70 +1,74 @@
-[gd_scene load_steps=3 format=3 uid="uid://caquj6w0wp01m"]
+[gd_scene format=3 uid="uid://caquj6w0wp01m"]
 
 [ext_resource type="Script" uid="uid://b7tb3a0mevqa" path="res://Windows/MainWindow.cs" id="1_e6s26"]
 [ext_resource type="Script" uid="uid://juj0eirfwcq7" path="res://Windows/ResizeListener.cs" id="2_442kg"]
 
-[node name="MainWindow" type="Node2D"]
+[node name="MainWindow" type="Node2D" unique_id=280712563]
 script = ExtResource("1_e6s26")
 
-[node name="UI" type="PanelContainer" parent="."]
+[node name="UI" type="PanelContainer" parent="." unique_id=290897559]
 offset_right = 1152.0
 offset_bottom = 648.0
 size_flags_horizontal = 8
 
-[node name="Layout" type="VBoxContainer" parent="UI"]
+[node name="Layout" type="VBoxContainer" parent="UI" unique_id=15945025]
 layout_mode = 2
 
-[node name="TopMenu" type="HBoxContainer" parent="UI/Layout"]
+[node name="TopMenu" type="HBoxContainer" parent="UI/Layout" unique_id=616089902]
 layout_mode = 2
 
-[node name="OpenButton" type="Button" parent="UI/Layout/TopMenu"]
+[node name="OpenButton" type="Button" parent="UI/Layout/TopMenu" unique_id=560616881]
 layout_mode = 2
 text = "Open"
 
-[node name="ProjectSelector" type="TabBar" parent="UI/Layout"]
+[node name="ProjectSelector" type="TabBar" parent="UI/Layout" unique_id=884102252]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.3
 drag_to_rearrange_enabled = true
 
-[node name="Content" type="PanelContainer" parent="UI/Layout"]
+[node name="Content" type="PanelContainer" parent="UI/Layout" unique_id=813826259]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 10.0
 
-[node name="HorizontalSplitter" type="HSplitContainer" parent="UI/Layout/Content"]
+[node name="HorizontalSplitter" type="HSplitContainer" parent="UI/Layout/Content" unique_id=1785336940]
 layout_mode = 2
 
-[node name="SideBar" type="PanelContainer" parent="UI/Layout/Content/HorizontalSplitter"]
+[node name="SideBar" type="PanelContainer" parent="UI/Layout/Content/HorizontalSplitter" unique_id=1700149519]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.25
 
-[node name="ViewSelector" type="TabBar" parent="UI/Layout/Content/HorizontalSplitter/SideBar"]
+[node name="ViewSelector" type="TabBar" parent="UI/Layout/Content/HorizontalSplitter/SideBar" unique_id=2074076308]
 layout_mode = 2
 
-[node name="NodesView" type="Tree" parent="UI/Layout/Content/HorizontalSplitter/SideBar"]
+[node name="NodesView" type="Tree" parent="UI/Layout/Content/HorizontalSplitter/SideBar" unique_id=1203456555]
 layout_mode = 2
 
-[node name="CodeView" type="CodeEdit" parent="UI/Layout/Content/HorizontalSplitter/SideBar"]
+[node name="CodeView" type="CodeEdit" parent="UI/Layout/Content/HorizontalSplitter/SideBar" unique_id=581215476]
 visible = false
 layout_mode = 2
 
-[node name="MainContent" type="PanelContainer" parent="UI/Layout/Content/HorizontalSplitter"]
+[node name="MainContent" type="PanelContainer" parent="UI/Layout/Content/HorizontalSplitter" unique_id=693881752]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="StatusBar" type="PanelContainer" parent="UI/Layout"]
+[node name="GraphEdit" type="GraphEdit" parent="UI/Layout/Content/HorizontalSplitter/MainContent" unique_id=2073432261]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="StatusBar" type="PanelContainer" parent="UI/Layout" unique_id=1499159385]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.0
 
-[node name="Label" type="Label" parent="UI/Layout/StatusBar"]
+[node name="Label" type="Label" parent="UI/Layout/StatusBar" unique_id=1931455754]
 layout_mode = 2
 text = "Status Bar"
 
-[node name="ResizeListener" type="Node" parent="." node_paths=PackedStringArray("RootUiNode")]
+[node name="ResizeListener" type="Node" parent="." unique_id=1942374245 node_paths=PackedStringArray("RootUiNode")]
 script = ExtResource("2_442kg")
 RootUiNode = NodePath("../UI")

@@ -1,8 +1,9 @@
-<Project Sdk="Godot.NET.Sdk/4.4.1">
+<Project Sdk="Godot.NET.Sdk/4.6.1">
   <PropertyGroup>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>SimpleDiagram</RootNamespace>
     <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>12</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,5 +21,9 @@
 
   <ItemGroup>
     <Folder Include="Parser\SimpleDiagramProjectFile\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Parser\Mermaid\Test.mermaid" />
   </ItemGroup>
 </Project>

@@ -1,6 +1,8 @@
-﻿namespace SimpleDiagram.Parser;
+﻿using SimpleDiagram.DocumentModel;
+
+namespace SimpleDiagram.Parser;
 
 public interface IParser
 {
-    object Parse();
+    SimpleDiagramDocument Parse(string file);
 }
