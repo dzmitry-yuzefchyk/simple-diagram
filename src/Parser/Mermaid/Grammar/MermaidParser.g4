@@ -5,29 +5,29 @@ options {
 }
 
 diagram
-    : type orientation nodes EOF
+    : type orientation statements EOF
     ;
 
 type
-    : FLOWCHART
-    | GRAPH
-    | SEQUENCE_DIAGRAM
+    : 'flowchart'
+    | 'graph'
+    | 'sequenceDiagram'
     ;
 
 orientation
-    : TOP_DOWN
-    | TOP_BOTTOM
-    | BOTTOM_RIGHT
-    | RIGHT_LEFT
-    | LEFT_RIGHT
+    : 'TD' | 'TB'   #topToBottom
+    | 'BT'          #bottomToTop
+    | 'RL'          #rightToLeft
+    | 'LR'          #leftToRight
     ;
 
-nodes
-    : reference+
+statements
+    : statement+
     ;
 
-reference
-    : nodeDefinition link nodeDefinition
+statement
+    : nodeDefinition                        #standaloneNode
+    | nodeDefinition link nodeDefinition    #reference
     ;
 
 link
@@ -40,7 +40,3 @@ link
 nodeDefinition
     : ID
     ;
-
-//indent_block:
-
-

@@ -20,10 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Parser\SimpleDiagramProjectFile\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="Parser\Mermaid\Test.mermaid" />
   </ItemGroup>
 </Project>

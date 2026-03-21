@@ -10,16 +10,31 @@ public class SimpleDiagramMermaidVisitor : MermaidParserBaseVisitor<SimpleDiagra
 
     public override SimpleDiagramDocument VisitDiagram(MermaidParser.DiagramContext context)
     {
-        var result = VisitNodes(context.nodes());
+        var result = VisitStatements(context.statements());
         return result;
     }
 
-    public override SimpleDiagramDocument VisitNodes(MermaidParser.NodesContext context)
+    public override SimpleDiagramDocument VisitStatements(MermaidParser.StatementsContext context)
     {
-        foreach (var referenceContext in context.reference())
+        foreach (var statementContext in context.statement())
         {
-            VisitReference(referenceContext);
+            if (statementContext is MermaidParser.StandaloneNodeContext standaloneNodeContext)
+            {
+                VisitStandaloneNode(standaloneNodeContext);
+            }
+            else if (statementContext is MermaidParser.ReferenceContext referenceContext)
+            {
+                VisitReference(referenceContext);
+            }
         }
+
+        return _document;
+    }
+
+    public override SimpleDiagramDocument VisitStandaloneNode(MermaidParser.StandaloneNodeContext context)
+    {
+        var id = context.nodeDefinition().ID().GetText();
+        _document.AddNode(new Node(id, NodeShape.RoundEdge));
 
         return _document;
     }
@@ -50,8 +65,8 @@ public class SimpleDiagramMermaidVisitor : MermaidParserBaseVisitor<SimpleDiagra
             linkType = ReferenceType.Thick;
         }
 
-        _document.AddNode(new Node(parentId));
-        _document.AddNode(new Node(childId));
+        _document.AddNode(new Node(parentId, NodeShape.None));
+        _document.AddNode(new Node(childId, NodeShape.None));
         _document.ConnectNodes(parentId, childId, linkType);
 
         return _document;

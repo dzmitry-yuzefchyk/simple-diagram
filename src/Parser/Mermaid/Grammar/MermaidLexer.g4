@@ -13,7 +13,7 @@ SEQUENCE_DIAGRAM: 'sequenceDiagram';
 // orientations
 TOP_DOWN: 'TD';
 TOP_BOTTOM: 'TB';
-BOTTOM_RIGHT: 'BT';
+BOTTOM_TOP: 'BT';
 RIGHT_LEFT: 'RL';
 LEFT_RIGHT: 'LR';
 
@@ -22,6 +22,9 @@ LINK_ARROW: '-->';
 LINK_OPEN: '--';
 LINK_DOTTED: '-.->';
 LINK_THICK: '==>';
+
+PARENTHESIS_OPEN: '(';
+PARENTHESIS_CLOSE: ')';
 
 ID: [a-zA-Z0-9_]+;
 

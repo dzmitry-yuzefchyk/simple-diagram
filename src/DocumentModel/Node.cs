@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace SimpleDiagram.DocumentModel;
 
 [DebuggerDisplay("{Id} | {_references.Count}")]
-public class Node(string id)
+public class Node(string id, NodeShape shape, string title = "")
 {
     public string Id { get; } = id;
 
