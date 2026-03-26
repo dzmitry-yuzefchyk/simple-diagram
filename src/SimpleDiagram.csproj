@@ -2,8 +2,6 @@
   <PropertyGroup>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>SimpleDiagram</RootNamespace>
-    <TargetFramework>net8.0</TargetFramework>
-    <LangVersion>12</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

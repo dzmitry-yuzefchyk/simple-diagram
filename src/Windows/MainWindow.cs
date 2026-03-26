@@ -18,11 +18,16 @@ public partial class MainWindow : Node2D
         _parser = new MermaidProcessor();
         _document = _parser.Parse("./Parser/Mermaid/Test.mermaid");
 
+        DrawGraph(_graph, _document);
+    }
+
+    private static void DrawGraph(GraphEdit graph, SimpleDiagramDocument document)
+    {
         // TODO: this is stupid, tree traversal should be implemented instead to avoid duplicates?
         HashSet<string> addedNodes = new();
         HashSet<(string, string)> addedReferences = new();
 
-        foreach (var reference in _document)
+        foreach (var reference in document)
         {
             var parentId = reference.Parent.Id;
             var childId = reference.Child.Id;
@@ -30,27 +35,33 @@ public partial class MainWindow : Node2D
             if (!addedNodes.Contains(parentId))
             {
                 var parentNode = new GraphNode();
-                parentNode.Name = parentId;
+                var label = new Label();
+                parentNode.AddChild(label);
+                parentNode.SetSlot(0, true, 0, Colors.White, true, 0, Colors.White);
+                parentNode.Name = $"node-{parentId}";
                 parentNode.TooltipText = parentId;
                 parentNode.Title = parentId;
-                _graph.AddChild(parentNode);
+                graph.AddChild(parentNode);
                 addedNodes.Add(parentId);
             }
 
             if (!addedNodes.Contains(childId))
             {
                 var childNode = new GraphNode();
-                childNode.Name = childId;
+                var label = new Label();
+                childNode.AddChild(label);
+                childNode.SetSlot(0, true, 0, Colors.White, true, 0, Colors.White);
+                childNode.Name = $"node-{childId}";
                 childNode.TooltipText = childId;
                 childNode.Title = childId;
-                _graph.AddChild(childNode);
+                graph.AddChild(childNode);
                 addedNodes.Add(childId);
             }
 
             var possibleReference = (parentId, childId);
             if (!addedReferences.Contains(possibleReference))
             {
-                _graph.ConnectNode(parentId, 0, childId, 0);
+                graph.ConnectNode($"node-{parentId}", 0, $"node-{childId}", 0);
                 addedReferences.Add(possibleReference);
             }
         }
