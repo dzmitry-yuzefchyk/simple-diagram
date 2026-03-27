@@ -1,8 +1,8 @@
-﻿using SimpleDiagram.DocumentModel;
+﻿using SimpleDiagram.Parser.DocumentModel.Ast;
 
 namespace SimpleDiagram.Parser;
 
 public interface IParser
 {
-    SimpleDiagramDocument Parse(string file);
+    AstDiagram Parse(string text);
 }

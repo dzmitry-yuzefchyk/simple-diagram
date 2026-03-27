@@ -1,4 +1,4 @@
-﻿namespace SimpleDiagram.DocumentModel;
+﻿namespace SimpleDiagram.Parser.DocumentModel.Enum;
 
 public enum ReferenceType
 {

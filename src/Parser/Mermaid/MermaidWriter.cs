@@ -4,19 +4,13 @@ using SimpleDiagram.Parser.Mermaid.Grammar;
 
 namespace SimpleDiagram.Parser.Mermaid;
 
-public class MermaidProcessor : IParser
+public class MermaidWriter : IWriter
 {
-    public AstDiagram Parse(string text)
+    public void Write(AstDiagram document, string text, string outputFile)
     {
         var stream = new AntlrInputStream(text);
         var lexer = new MermaidLexer(stream);
         var tokens = new CommonTokenStream(lexer);
-        var parser = new MermaidParser(tokens);
-        var visitor = new SimpleDiagramMermaidVisitor();
-
-        var diagram = parser.diagram();
-        var result = visitor.Visit(diagram);
-
-        return result;
+        var rewriter = new TokenStreamRewriter(tokens);
     }
 }

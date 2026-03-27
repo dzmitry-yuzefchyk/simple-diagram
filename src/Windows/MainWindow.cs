@@ -1,69 +1,48 @@
-using System.Collections.Generic;
 using Godot;
-using SimpleDiagram.DocumentModel;
 using SimpleDiagram.Parser;
+using SimpleDiagram.Parser.DocumentModel.Ast;
 using SimpleDiagram.Parser.Mermaid;
 
 namespace SimpleDiagram.Windows;
 
 public partial class MainWindow : Node2D
 {
+    private DiagramController _controller;
     private IParser _parser;
-    private SimpleDiagramDocument _document;
+    private AstDiagram _diagram;
     private GraphEdit _graph;
 
     public override void _Ready()
     {
         _graph = GetNode<GraphEdit>("%GraphEdit");
-        _parser = new MermaidProcessor();
-        _document = _parser.Parse("./Parser/Mermaid/Test.mermaid");
+        _controller = new DiagramController(new MermaidProcessor(), new MermaidWriter());
+        _controller.ReadFile("./Parser/Mermaid/Test.mermaid");
+        _diagram = _controller.Diagram!;
 
-        DrawGraph(_graph, _document);
+        DrawGraph(_graph, _diagram);
     }
 
-    private static void DrawGraph(GraphEdit graph, SimpleDiagramDocument document)
+    private static void DrawGraph(GraphEdit graph, AstDiagram document)
     {
-        // TODO: this is stupid, tree traversal should be implemented instead to avoid duplicates?
-        HashSet<string> addedNodes = new();
-        HashSet<(string, string)> addedReferences = new();
+        foreach (var astNode in document.Nodes.Values)
+        {
+            var nodeId = $"node-{astNode.Id}";
+            var node = new GraphNode();
+            var label = new Label();
+            node.AddChild(label);
+            node.SetSlot(0, true, 0, Colors.White, true, 0, Colors.White);
+            node.Name = nodeId;
+            node.TooltipText = astNode.Id.ToString();
+            node.Title = astNode.Id.ToString();
+            graph.AddChild(node);
+        }
 
-        foreach (var reference in document)
+        foreach (var reference in document.References)
         {
             var parentId = reference.Parent.Id;
             var childId = reference.Child.Id;
 
-            if (!addedNodes.Contains(parentId))
-            {
-                var parentNode = new GraphNode();
-                var label = new Label();
-                parentNode.AddChild(label);
-                parentNode.SetSlot(0, true, 0, Colors.White, true, 0, Colors.White);
-                parentNode.Name = $"node-{parentId}";
-                parentNode.TooltipText = parentId;
-                parentNode.Title = parentId;
-                graph.AddChild(parentNode);
-                addedNodes.Add(parentId);
-            }
-
-            if (!addedNodes.Contains(childId))
-            {
-                var childNode = new GraphNode();
-                var label = new Label();
-                childNode.AddChild(label);
-                childNode.SetSlot(0, true, 0, Colors.White, true, 0, Colors.White);
-                childNode.Name = $"node-{childId}";
-                childNode.TooltipText = childId;
-                childNode.Title = childId;
-                graph.AddChild(childNode);
-                addedNodes.Add(childId);
-            }
-
-            var possibleReference = (parentId, childId);
-            if (!addedReferences.Contains(possibleReference))
-            {
-                graph.ConnectNode($"node-{parentId}", 0, $"node-{childId}", 0);
-                addedReferences.Add(possibleReference);
-            }
+            graph.ConnectNode($"node-{parentId}", 0, $"node-{childId}", 0);
         }
     }
 }

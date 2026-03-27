@@ -1,21 +1,37 @@
-﻿using System.Linq;
-using SimpleDiagram.DocumentModel;
+﻿using System;
+using SimpleDiagram.Parser.DocumentModel.Ast;
+using SimpleDiagram.Parser.DocumentModel.Enum;
 using SimpleDiagram.Parser.Mermaid.Grammar;
 
 namespace SimpleDiagram.Parser.Mermaid;
 
-public class SimpleDiagramMermaidVisitor : MermaidParserBaseVisitor<SimpleDiagramDocument>
+public class SimpleDiagramMermaidVisitor : MermaidParserBaseVisitor<AstDiagram>
 {
-    private readonly SimpleDiagramDocument _document = new();
+    private AstDiagram? _diagram;
 
-    public override SimpleDiagramDocument VisitDiagram(MermaidParser.DiagramContext context)
+    public override AstDiagram VisitDiagram(MermaidParser.DiagramContext context)
     {
-        var result = VisitStatements(context.statements());
-        return result;
+        AstDiagram diagram = new()
+        {
+            OriginalContext = context,
+            Orientation = DiagramOrientation.TopToBottom,
+            Type = DiagramType.Flowchart,
+            TokenStartIndex = context.Start.StartIndex,
+            TokenStopIndex = context.Stop.StopIndex
+        };
+        _diagram = diagram;
+
+        VisitStatements(context.statements());
+        return diagram;
     }
 
-    public override SimpleDiagramDocument VisitStatements(MermaidParser.StatementsContext context)
+    public override AstDiagram VisitStatements(MermaidParser.StatementsContext context)
     {
+        if (_diagram == null)
+        {
+            throw new InvalidOperationException("Trying to parse input which doesn't start with diagram");
+        }
+
         foreach (var statementContext in context.statement())
         {
             if (statementContext is MermaidParser.StandaloneNodeContext standaloneNodeContext)
@@ -28,23 +44,31 @@ public class SimpleDiagramMermaidVisitor : MermaidParserBaseVisitor<SimpleDiagra
             }
         }
 
-        return _document;
+        return _diagram;
     }
 
-    public override SimpleDiagramDocument VisitStandaloneNode(MermaidParser.StandaloneNodeContext context)
+    public override AstDiagram VisitStandaloneNode(MermaidParser.StandaloneNodeContext context)
     {
-        var id = context.nodeDefinition().ID().GetText();
-        _document.AddNode(new Node(id, NodeShape.RoundEdge));
+        if (_diagram == null)
+        {
+            throw new InvalidOperationException("Trying to parse input which doesn't start with diagram");
+        }
 
-        return _document;
+        VisitNodeDefinition(context.nodeDefinition());
+        return _diagram;
     }
 
-    public override SimpleDiagramDocument VisitReference(MermaidParser.ReferenceContext context)
+    public override AstDiagram VisitReference(MermaidParser.ReferenceContext context)
     {
-        var parent = context.nodeDefinition().First();
-        var parentId = parent.ID().GetText();
-        var child = context.nodeDefinition().Last();
-        var childId = child.ID().GetText();
+        if (_diagram == null)
+        {
+            throw new InvalidOperationException("Trying to parse input which doesn't start with diagram");
+        }
+
+        var parentContext = context.parentNode;
+        var parentId = parentContext.ID().GetText();
+        var childContext = context.childNode;
+        var childId = childContext.ID().GetText();
 
         var link = context.link();
         var linkType = ReferenceType.Arrow;
@@ -65,10 +89,41 @@ public class SimpleDiagramMermaidVisitor : MermaidParserBaseVisitor<SimpleDiagra
             linkType = ReferenceType.Thick;
         }
 
-        _document.AddNode(new Node(parentId, NodeShape.None));
-        _document.AddNode(new Node(childId, NodeShape.None));
-        _document.ConnectNodes(parentId, childId, linkType);
+        VisitNodeDefinition(parentContext);
+        VisitNodeDefinition(childContext);
 
-        return _document;
+        _diagram.AddReference(
+            context.Start.StartIndex,
+            context.Stop.StopIndex,
+            new AstNodeId(parentId),
+            new AstNodeId(childId),
+            linkType,
+            ""
+        );
+
+        return _diagram;
+    }
+
+
+    public override AstDiagram VisitNodeDefinition(MermaidParser.NodeDefinitionContext context)
+    {
+        if (_diagram == null)
+        {
+            throw new InvalidOperationException("Trying to parse input which doesn't start with diagram");
+        }
+
+        var id = context.ID().GetText()!;
+        var astNode = new AstStandaloneNode
+        {
+            TokenStartIndex = context.Start.StartIndex,
+            TokenStopIndex = context.Stop.StopIndex,
+            Id = new AstNodeId(id),
+            Title = "",
+            Position = null,
+            Shape = NodeShape.None
+        };
+        _diagram.AddNode(astNode);
+
+        return _diagram;
     }
 }
