@@ -17,8 +17,4 @@
       <Visitor>true</Visitor>
     </Antlr4>
   </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Parser\Mermaid\Test.mermaid" />
-  </ItemGroup>
 </Project>

@@ -26,8 +26,8 @@ statements
     ;
 
 statement
-    : nodeDefinition                        #standaloneNode
-    | parentNode=nodeDefinition link childNode=nodeDefinition    #reference
+    : nodeDefinition                                            #standaloneNode
+    | parentNode=nodeDefinition link childNode=nodeDefinition   #reference
     ;
 
 link

@@ -1,9 +1,13 @@
 ﻿lexer grammar MermaidLexer;
 
+channels {
+    COMMENTS
+}
+
 // fragments
 fragment DIGIT: [0-9];
 
-COMMENT: '%%' -> skip;
+COMMENT: '%%' ~[\r\n]* -> channel(COMMENTS);
 
 // types
 FLOWCHART: 'flowchart';

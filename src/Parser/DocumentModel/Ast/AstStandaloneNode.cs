@@ -9,5 +9,5 @@ public class AstStandaloneNode : AstNode
 
     public NodeShape Shape { get; init; }
     public string Title { get; set; } = string.Empty;
-    public Vector2? Position { get; init; }
+    public Vector2? Position { get; set; }
 }

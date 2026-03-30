@@ -16,8 +16,8 @@ public class SimpleDiagramMermaidVisitor : MermaidParserBaseVisitor<AstDiagram>
             OriginalContext = context,
             Orientation = DiagramOrientation.TopToBottom,
             Type = DiagramType.Flowchart,
-            TokenStartIndex = context.Start.StartIndex,
-            TokenStopIndex = context.Stop.StopIndex
+            TokenStartIndex = context.Start.TokenIndex,
+            TokenStopIndex = context.Stop.TokenIndex,
         };
         _diagram = diagram;
 
@@ -92,14 +92,16 @@ public class SimpleDiagramMermaidVisitor : MermaidParserBaseVisitor<AstDiagram>
         VisitNodeDefinition(parentContext);
         VisitNodeDefinition(childContext);
 
-        _diagram.AddReference(
-            context.Start.StartIndex,
-            context.Stop.StopIndex,
-            new AstNodeId(parentId),
-            new AstNodeId(childId),
-            linkType,
-            ""
-        );
+        var reference = new AstReference
+        {
+            TokenStartIndex = parentContext.Start.TokenIndex,
+            TokenStopIndex = childContext.Stop.TokenIndex,
+            Parent = new AstNodeId(parentId),
+            Child = new AstNodeId(childId),
+            Type = linkType,
+            Title = ""
+        };
+        _diagram.AddReference(reference);
 
         return _diagram;
     }
@@ -115,8 +117,8 @@ public class SimpleDiagramMermaidVisitor : MermaidParserBaseVisitor<AstDiagram>
         var id = context.ID().GetText()!;
         var astNode = new AstStandaloneNode
         {
-            TokenStartIndex = context.Start.StartIndex,
-            TokenStopIndex = context.Stop.StopIndex,
+            TokenStartIndex = context.Start.TokenIndex,
+            TokenStopIndex = context.Stop.TokenIndex,
             Id = new AstNodeId(id),
             Title = "",
             Position = null,

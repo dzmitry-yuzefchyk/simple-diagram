@@ -3,8 +3,11 @@
 [ext_resource type="Script" uid="uid://b7tb3a0mevqa" path="res://Windows/MainWindow.cs" id="1_e6s26"]
 [ext_resource type="Script" uid="uid://juj0eirfwcq7" path="res://Windows/ResizeListener.cs" id="2_442kg"]
 
-[node name="MainWindow" type="Node2D" unique_id=280712563]
+[node name="MainWindow" type="Node2D" unique_id=280712563 node_paths=PackedStringArray("_graph", "_openFileButton", "_dialog")]
 script = ExtResource("1_e6s26")
+_graph = NodePath("UI/Layout/Content/HorizontalSplitter/MainContent/GraphEdit")
+_openFileButton = NodePath("UI/Layout/TopMenu/OpenButton")
+_dialog = NodePath("UI/FileDialog")
 
 [node name="UI" type="PanelContainer" parent="." unique_id=290897559]
 offset_right = 1152.0
@@ -20,6 +23,10 @@ layout_mode = 2
 [node name="OpenButton" type="Button" parent="UI/Layout/TopMenu" unique_id=560616881]
 layout_mode = 2
 text = "Open"
+
+[node name="SaveButton" type="Button" parent="UI/Layout/TopMenu" unique_id=664361731]
+layout_mode = 2
+text = "Save"
 
 [node name="ProjectSelector" type="TabBar" parent="UI/Layout" unique_id=884102252]
 layout_mode = 2
@@ -57,7 +64,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="GraphEdit" type="GraphEdit" parent="UI/Layout/Content/HorizontalSplitter/MainContent" unique_id=2073432261]
-unique_name_in_owner = true
 layout_mode = 2
 
 [node name="StatusBar" type="PanelContainer" parent="UI/Layout" unique_id=1499159385]
@@ -69,6 +75,24 @@ size_flags_stretch_ratio = 0.0
 layout_mode = 2
 text = "Status Bar"
 
+[node name="FileDialog" type="FileDialog" parent="UI" unique_id=1138298263]
+oversampling_override = 1.0
+title = "Open a File"
+initial_position = 4
+ok_button_text = "Open"
+dialog_hide_on_ok = true
+cancel_button_text = "Close"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.mermaid")
+favorites_enabled = false
+deleting_enabled = false
+
 [node name="ResizeListener" type="Node" parent="." unique_id=1942374245 node_paths=PackedStringArray("RootUiNode")]
 script = ExtResource("2_442kg")
 RootUiNode = NodePath("../UI")
+
+[connection signal="pressed" from="UI/Layout/TopMenu/OpenButton" to="." method="OnOpenFilePressed"]
+[connection signal="pressed" from="UI/Layout/TopMenu/SaveButton" to="." method="OnSaveFilePressed"]
+[connection signal="canceled" from="UI/FileDialog" to="." method="OnFileNotSelected"]
+[connection signal="file_selected" from="UI/FileDialog" to="." method="OnFileSelected"]

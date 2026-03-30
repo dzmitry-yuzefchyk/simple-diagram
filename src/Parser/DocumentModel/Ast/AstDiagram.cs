@@ -31,29 +31,13 @@ public class AstDiagram : AstNode
         _nodes.TryAdd(node.Id, node);
     }
 
-    public void AddReference(
-        int tokenStartIndex,
-        int tokenStopIndex,
-        AstNodeId parent,
-        AstNodeId child,
-        ReferenceType referenceType,
-        string title = ""
-    )
+    public void AddReference(AstReference reference)
     {
-        if (!Nodes.ContainsKey(parent) && !Nodes.ContainsKey(child))
+        if (!Nodes.ContainsKey(reference.Parent) && !Nodes.ContainsKey(reference.Child))
         {
             return;
         }
 
-        var reference = new AstReference
-        {
-            TokenStartIndex = tokenStartIndex,
-            TokenStopIndex = tokenStopIndex,
-            Parent = parent,
-            Child = child,
-            Type = referenceType,
-            Title = title
-        };
         _references.Add(reference);
     }
 }
