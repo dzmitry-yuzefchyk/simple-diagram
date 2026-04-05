@@ -85,6 +85,7 @@ cancel_button_text = "Close"
 file_mode = 0
 access = 2
 filters = PackedStringArray("*.mermaid")
+use_native_dialog = true
 favorites_enabled = false
 deleting_enabled = false
 

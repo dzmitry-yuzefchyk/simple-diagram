@@ -1,13 +1,12 @@
 ﻿lexer grammar MermaidLexer;
 
 channels {
-    COMMENTS
+    COMMENTS_CHANNEL,
+    POSITIONS_CHANNEL
 }
 
 // fragments
 fragment DIGIT: [0-9];
-
-COMMENT: '%%' ~[\r\n]* -> channel(COMMENTS);
 
 // types
 FLOWCHART: 'flowchart';
@@ -27,9 +26,15 @@ LINK_OPEN: '--';
 LINK_DOTTED: '-.->';
 LINK_THICK: '==>';
 
+POSITION: 'POSITION';
+
 PARENTHESIS_OPEN: '(';
 PARENTHESIS_CLOSE: ')';
+MINUS: '-';
+COMMA: ',';
+PERCENT: '%';
 
+NUMBER: MINUS?[0-9]+;
 ID: [a-zA-Z0-9_]+;
 
 NEWLINE
@@ -37,3 +42,5 @@ NEWLINE
     ;
 WHITE_SPACE: ' '+ -> channel(HIDDEN);
 TAB: '\t'+ -> channel(HIDDEN);
+POSITION_COMMENT : '%%POSITION-' ~[\r\n]+? '%%' -> channel(POSITIONS_CHANNEL);
+COMMENT: '%%' ~[\r\n]* -> channel(COMMENTS_CHANNEL);

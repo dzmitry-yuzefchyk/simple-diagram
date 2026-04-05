@@ -3,9 +3,7 @@
 ## TODO
 
 - [ ] Store project meta-data
-  - [ ] Figure out how to store nodes position
-      - [ ] Custom project file?
-      - [ ] Using comments in mermaid files?
+  - [x] Using comments to store positions in mermaid file
   - [ ] How to store notes and text on diagram outside of nodes?
 - [ ] UI
   - [ ] File open dialog

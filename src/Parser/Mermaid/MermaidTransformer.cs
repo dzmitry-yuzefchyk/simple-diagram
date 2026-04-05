@@ -1,4 +1,5 @@
-﻿using Antlr4.Runtime;
+﻿using System.Collections.Generic;
+using Antlr4.Runtime;
 using Godot;
 using SimpleDiagram.Parser.DocumentModel.Ast;
 using SimpleDiagram.Parser.Mermaid.Grammar;
@@ -16,17 +17,53 @@ public class MermaidTransformer : ITransformer
         tokens.Fill();
         var rewriter = new TokenStreamRewriter(tokens);
 
-        foreach (var astNode in document.Nodes.Values)
+        var processedNodes = new HashSet<AstNodeId>();
+        OverrideExistingComments(rewriter, processedNodes, document);
+        AppendMissingComments(rewriter, processedNodes, document);
+
+        return rewriter.GetText();
+    }
+
+    private void OverrideExistingComments(
+        TokenStreamRewriter rewriter,
+        HashSet<AstNodeId> processedNodes,
+        AstDiagram document
+    )
+    {
+        foreach (var (_, comment) in document.PositionComments)
         {
-            if (astNode.Position is null || astNode.Position == Vector2.Zero)
+            if (!processedNodes.Add(comment.Id))
             {
                 continue;
             }
 
-            // TODO: decide how to save position in file
-            rewriter.InsertBefore(astNode.TokenStartIndex, $"%%POSITION{astNode.Position}%%{Environment.NewLine}");
+            rewriter.Replace(comment.TokenStartIndex, comment.TokenStopIndex, comment.ToString());
         }
+    }
 
-        return rewriter.GetText();
+    private void AppendMissingComments(
+        TokenStreamRewriter rewriter,
+        HashSet<AstNodeId> processedNodes,
+        AstDiagram document
+    )
+    {
+        foreach (var (_, node) in document.Nodes)
+        {
+            if (!processedNodes.Add(node.Id))
+            {
+                continue;
+            }
+
+            if (node.Position is null || node.Position == Vector2.Zero)
+            {
+                continue;
+            }
+
+            var comment = new AstNodePositionComment
+            {
+                TokenStartIndex = 0, TokenStopIndex = 0, Id = node.Id, Position = node.Position.Value
+            };
+            rewriter.InsertAfter(document.TokenStopIndex, $"{Environment.NewLine}{comment}");
+        }
     }
 }

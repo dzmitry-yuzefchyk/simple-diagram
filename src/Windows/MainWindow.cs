@@ -57,7 +57,7 @@ public partial class MainWindow : Node2D
 
             if (astNode.Position is not null)
             {
-                node.Position = astNode.Position.Value;
+                node.PositionOffset = astNode.Position.Value;
             }
 
             node.Dragged += (from, to) => GraphNodeMoved(astNode.Id, from, to);
@@ -102,6 +102,7 @@ public partial class MainWindow : Node2D
         }
 
         _controller.Write(_document, _file);
+        OnFileSelected(_file);
     }
 
     private void OnFileSelected(string file)

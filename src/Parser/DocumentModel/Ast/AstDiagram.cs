@@ -18,12 +18,20 @@ public class AstDiagram : AstNode
     private readonly Dictionary<AstNodeId, AstStandaloneNode> _nodes = new();
     public IReadOnlyDictionary<AstNodeId, AstStandaloneNode> Nodes => _nodes;
 
+    private readonly Dictionary<AstNodeId, AstNodePositionComment> _positionComments = new();
+    public IReadOnlyDictionary<AstNodeId, AstNodePositionComment> PositionComments => _positionComments;
+
     private readonly List<AstWarning> _warnings = [];
     public IEnumerable<AstWarning> Warnings => _warnings;
 
     public void AddWarning(AstWarning warning)
     {
         _warnings.Add(warning);
+    }
+
+    public void AddPositionComment(AstNodePositionComment comment)
+    {
+        _positionComments.TryAdd(comment.Id, comment);
     }
 
     public void AddNode(AstStandaloneNode node)
