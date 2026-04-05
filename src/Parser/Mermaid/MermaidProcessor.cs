@@ -46,10 +46,7 @@ public class MermaidProcessor : IParser
             }
 
             diagram.AddPositionComment(commentNode!);
-            if (diagram.Nodes.TryGetValue(commentNode!.Id, out AstStandaloneNode? diagramNode))
-            {
-                diagramNode.Position = commentNode.Position;
-            }
+            diagram.MoveNode(commentNode!.Id, commentNode.Position);
         }
     }
 }

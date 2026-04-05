@@ -42,9 +42,9 @@ public partial class MainWindow : Node2D
         {
             existingGraphNode.QueueFree();
         }
-        graph.ClearConnections();
 
-        foreach (var astNode in document.Nodes.Values)
+        graph.ClearConnections();
+        foreach (var astNode in document.Nodes())
         {
             var nodeId = $"{_fileCount}-node-{astNode.Id}";
             var node = new GraphNode();
@@ -64,7 +64,7 @@ public partial class MainWindow : Node2D
             graph.AddChild(node);
         }
 
-        foreach (var reference in document.References)
+        foreach (var reference in document.References())
         {
             var parentId = reference.Parent.Id;
             var childId = reference.Child.Id;
@@ -84,9 +84,9 @@ public partial class MainWindow : Node2D
         _dialog.Visible = true;
     }
 
-    private void GraphNodeMoved(AstNodeId id, Vector2 from, Vector2 to)
+    private void GraphNodeMoved(AstNodeId id, Vector2 _, Vector2 to)
     {
-        _document.Diagram.Nodes[id].Position = to;
+        _document.Diagram.MoveNode(id, to);
     }
 
     private void OnFileNotSelected()

@@ -30,7 +30,7 @@ public class MermaidTransformer : ITransformer
         AstDiagram document
     )
     {
-        foreach (var (_, comment) in document.PositionComments)
+        foreach (var comment in document.Comments())
         {
             if (!processedNodes.Add(comment.Id))
             {
@@ -47,7 +47,7 @@ public class MermaidTransformer : ITransformer
         AstDiagram document
     )
     {
-        foreach (var (_, node) in document.Nodes)
+        foreach (AstStandaloneNode node in document.Nodes())
         {
             if (!processedNodes.Add(node.Id))
             {
